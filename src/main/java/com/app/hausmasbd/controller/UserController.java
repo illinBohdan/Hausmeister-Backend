@@ -1,6 +1,8 @@
 package com.app.hausmasbd.controller;
 
+import com.app.hausmasbd.dto.UserDTO;
 import com.app.hausmasbd.entity.User;
+import com.app.hausmasbd.mapper.UserMapper;
 import com.app.hausmasbd.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,14 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserMapper userMapper;
 
     @PostMapping("/register")
-    public ResponseEntity<User> saveUser(@Valid @RequestBody User user){
+    public ResponseEntity<User> saveUser(@Valid @RequestBody UserDTO userDto){
+
+        User user = userMapper.toEntity(userDto);
+
         User savedUser = userRepository.save(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
